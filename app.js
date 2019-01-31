@@ -5,10 +5,19 @@ const multer = require('multer');
 const session = require('express-session');
 const Nedb = require('nedb');
 const bcrypt = require('bcrypt');
+const uuid = require('uuid/v1'); 
 const fs = require('fs');
 
 const app = express();
-const upload = multer({dest: 'upload/'})
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, __dirname + '/upload')
+    },
+    filename: function (req, file, cb) {
+        cb(null, uuid())
+    }
+});
+const upload = multer({storage});
 
 const db = {};
 db.datas = new Nedb({filename: 'datasfile'});
