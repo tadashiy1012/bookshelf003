@@ -7,7 +7,9 @@
             <div>
                 <button v-on:click="toggleAddShow">toggle add panel</button>
                 <span> </span>
-                <button v-on:click="toggleRmShow">toggle remove panel</button>
+                <button v-on:click="toggleRmShow">toggle remove button</button>
+                <span> </span>
+                <button v-on:click="toggleDelShow">toggle delete button</button>
             </div>
         </div>
         <div class="addPanel" v-show="addShow">
@@ -21,24 +23,19 @@
                 </template>
             </ul>
         </div>
-        <div class="rmPanel" v-show="rmShow">
-            <div>remove panel</div>
-            <ul>
-                <template v-for="(bk, idx) in select">
-                    <li :key="idx">
-                        <button v-on:click="onRmClick(bk)">rm</button>
-                        {{bk.value.name}}
-                    </li>
-                </template>
-            </ul>
-        </div>
         <div>
             <ul class="bookGrid">
                 <template v-for="(bk, idx) in select">
                     <li :key="idx">
                         <router-link :to="'/preview/' + bk._id">
-                            <img :src="getSrc(bk)" alt="book">
+                            <div><img :src="getSrc(bk)" alt="book"></div>
                         </router-link>
+                        <div v-show="rmShow">
+                            <button v-on:click="onRmClick(bk)">remove</button>
+                        </div>
+                        <div v-show="delShow">
+                            <button v-on:click="onDelClick(bk)">delete</button>
+                        </div>
                     </li>
                 </template>
             </ul>
@@ -50,7 +47,8 @@ export default {
     data() {
         return {
             addShow: false,
-            rmShow: false
+            rmShow: false,
+            delShow: false
         };
     },
     computed: {
@@ -86,6 +84,9 @@ export default {
         toggleRmShow() {
             this.rmShow = !this.rmShow;
         },
+        toggleDelShow() {
+            this.delShow = !this.delShow;
+        },
         onAddClick(tgt) {
             const current = this.$route.params.category || 'all';
             const ctgrs = [...tgt.value.category, current];
@@ -103,6 +104,14 @@ export default {
             }).then(() => {
                 this.$store.dispatch('fetchBooks');
             });
+        },
+        onDelClick(tgt) {
+            const result = confirm('Do you really want to delete this?');
+            if (result) {
+                this.$store.dispatch('deleteBook', tgt._id).then(() => {
+                    this.$store.dispatch('fetchBooks');
+                });
+            }
         }
     },
     mounted() {

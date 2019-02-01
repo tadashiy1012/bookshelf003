@@ -207,6 +207,13 @@ const actions = {
         const opt = {method: 'POST', body: fd};
         const resp = await fetch('/update_book_ctgr', opt);
         console.log(resp);
+    },
+    async deleteBook({}, tgtId) {
+        const fd = new FormData();
+        fd.append('tgtId', tgtId);
+        const opt = {method: 'POST', body: fd};
+        const resp = await fetch('/delete_book', opt);
+        console.log(resp);
     }
 };
 
