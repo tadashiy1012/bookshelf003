@@ -3,6 +3,8 @@
         <div class="previewMenu">
             <div>title:<span>{{book.value.name}}</span></div>
             <div>
+                <button v-on:click="onDownloadClick(book)">download</button>
+                <span> </span>
                 <button v-on:click="onCloseClick">close</button>
             </div>
         </div>
@@ -49,6 +51,13 @@ export default {
         },
         onCloseClick() {
             this.$router.go(-1);
+        },
+        onDownloadClick(tgt) {
+            const a = document.createElement('a');
+            a.download = tgt.value.name;
+            a.href = URL.createObjectURL(tgt.pdf);
+            a.dataset.downloadurl = ['application/pdf', a.download, a.href].join(':');
+            a.click();
         }
     },
     mounted() {
