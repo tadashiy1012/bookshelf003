@@ -53,22 +53,25 @@ export default {
     },
     computed: {
         current() {
-            return this.$route.params.category || 'all';
+            const categories = this.$store.getters.categories;
+            const param = this.$route.params.category || '';
+            const result = (categories.find(e => e[0] === param) || ['', ''])[1];
+            return result;
         },
         books() {
             return this.$store.getters.books;
         },
         select() {
-            const ctgr = this.$route.params.category || 'all';
+            const ctgr = this.$route.params.category || '';
             const books = this.$store.getters.books;
-            const result = books.filter(e => [...e.value.category, 'all']
+            const result = books.filter(e => [...e.value.category, '']
                 .find(e2 => e2 === ctgr) !== void 0);
             return result;
         },
         noselect() {
-            const ctgr = this.$route.params.category || 'all';
+            const ctgr = this.$route.params.category || '';
             const books = this.$store.getters.books;
-            const result = books.filter(e => [...e.value.category, 'all']
+            const result = books.filter(e => [...e.value.category, '']
                 .find(e2 => e2 === ctgr) === void 0);
             return result;
         }
@@ -88,7 +91,8 @@ export default {
             this.delShow = !this.delShow;
         },
         onAddClick(tgt) {
-            const current = this.$route.params.category || 'all';
+            const current = this.$route.params.category;
+            if (current === void 0) return;
             const ctgrs = [...tgt.value.category, current];
             this.$store.dispatch('updateBook', {
                 tgtId: tgt._id, category: ctgrs
@@ -97,7 +101,8 @@ export default {
             });
         },
         onRmClick(tgt) {
-            const current = this.$route.params.category || 'all';
+            const current = this.$route.params.category;
+            if (current === void 0) return;
             const ctgrs = [...tgt.value.category.filter(e => e !== current)];
             this.$store.dispatch('updateBook', {
                 tgtId: tgt._id, category: ctgrs

@@ -137,8 +137,8 @@ const actions = {
             console.log(json);
             if (json.result !== 'ng') {
                 commit('setCategories', [
-                    'all',
-                    ...json.result.map(e => e.value.name)
+                    ['', 'all'],
+                    ...json.result.map(e => [e._id, e.value.name])
                 ]);
             }   
         } catch (err) {
@@ -213,6 +213,13 @@ const actions = {
         fd.append('tgtId', tgtId);
         const opt = {method: 'POST', body: fd};
         const resp = await fetch('/delete_book', opt);
+        console.log(resp);
+    },
+    async deleteCategory({}, tgtId) {
+        const fd = new FormData();
+        fd.append('tgtId', tgtId);
+        const opt = {method: 'POST', body: fd};
+        const resp = await fetch('/delete_category', opt);
         console.log(resp);
     }
 };

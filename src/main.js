@@ -14,6 +14,7 @@ const router = new VueRouter({
     routes: [
         {path: '/', component: Home, children: [
             {path: '/', component: Catalog},
+            {path: '/catalog', component: Catalog},
             {path: '/catalog/:category', component: Catalog},
             {path: '/preview/:bookId', component: Preview}
         ]},

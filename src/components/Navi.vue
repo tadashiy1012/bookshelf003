@@ -18,12 +18,17 @@
             <br>
             <button v-on:click="onCreateClick">create</button>
             <br>
+            <button v-on:click="onEditClick">edit</button>
+            <br>
             <ul class="ctgrLs">
                 <template v-for="(ctgr, idx) in categories">
                     <li :key="idx">
-                        <router-link :to="'/catalog/' + ctgr">
-                        {{ctgr}}
+                        <router-link :to="'/catalog/' + ctgr[0]">
+                            {{ctgr[1]}}
                         </router-link>
+                        <span v-show="showDel">
+                            <button v-on:click="onDelClick(ctgr)">del</button>
+                        </span>
                     </li>
                 </template>
             </ul>
@@ -32,6 +37,11 @@
 </template>
 <script>
 export default {
+    data() {
+        return {
+            showDel: false
+        };
+    },
     computed: {
         name() {
             return this.$store.getters.login;
@@ -63,6 +73,14 @@ export default {
                 await this.$store.dispatch('fetchBooks');
             });
             infile.click();
+        },
+        onEditClick() {
+            this.showDel = !this.showDel;
+        },
+        onDelClick(tgt) {
+            this.$store.dispatch('deleteCategory', tgt[0]).then(() => {
+                this.$store.dispatch('fetchCategories');
+            });
         }
     },
     mounted() {
