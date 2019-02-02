@@ -178,6 +178,18 @@ app.post('/delete_book', upload.none(), (req, res) => {
     }
 });
 
+app.post('/delete_category', upload.none(), (req, res) => {
+    if (req.session.name === void 0 || req.session.name === null) {
+        res.status(400).send('ng');
+    } else {
+        const query = {_id: req.body.tgtId};
+        db.datas.remove(query, {}, (err, rm) => {
+            if (err) res.status(500).send(err);
+            else res.send('ok');
+        });
+    }
+});
+
 app.get('/books', upload.none(), (req, res) => {
     if (req.session.name === void 0 || req.session.name === null) {
         res.status(400).send({result: 'ng'});
