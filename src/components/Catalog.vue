@@ -18,7 +18,7 @@
                 <template v-for="(bk, idx) in noselect">
                     <li :key="idx">
                         <button v-on:click="onAddClick(bk)">add</button>
-                        {{bk.value.name}}
+                        <span class="captionContainer">{{bk.value.name}}</span>
                     </li>
                 </template>
             </ul>
@@ -28,12 +28,12 @@
                 <template v-for="(bk, idx) in select">
                     <li :key="idx">
                         <router-link :to="'/preview/' + bk._id">
-                            <div><img :src="getSrc(bk)" alt="book"></div>
+                            <div class="thumbImgContainer"><img :src="getSrc(bk)" alt="book"></div>
                         </router-link>
-                        <div v-show="rmShow">
+                        <div class="buttonContainer" v-show="rmShow">
                             <button v-on:click="onRmClick(bk)">remove</button>
                         </div>
-                        <div v-show="delShow">
+                        <div class="buttonContainer" v-show="delShow">
                             <button v-on:click="onDelClick(bk)">delete</button>
                         </div>
                     </li>
@@ -164,7 +164,14 @@ export default {
     align-content: space-between;
     margin: 8px 0px;
 }
+.bookGrid .thumbImgContainer {
+    justify-self: center;
+    text-align: center;
+}
 .bookGrid img {
     border: solid 1px #666;
+}
+.buttonContainer {
+    text-align: center;
 }
 </style>
