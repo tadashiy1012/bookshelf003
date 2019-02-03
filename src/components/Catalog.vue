@@ -23,6 +23,9 @@
                 </template>
             </ul>
         </div>
+        <div class="searchPanel">
+            <div><span>search:</span><input type="text" v-model="search"></div>
+        </div>
         <div>
             <ul class="bookGrid">
                 <template v-for="(bk, idx) in select">
@@ -48,7 +51,8 @@ export default {
         return {
             addShow: false,
             rmShow: false,
-            delShow: false
+            delShow: false,
+            search: ''
         };
     },
     computed: {
@@ -65,7 +69,8 @@ export default {
             const ctgr = this.$route.params.category || '';
             const books = this.$store.getters.books;
             const result = books.filter(e => [...e.value.category, '']
-                .find(e2 => e2 === ctgr) !== void 0);
+                .find(e2 => e2 === ctgr) !== void 0)
+                .filter(e => e.value.name.indexOf(this.search) !== -1);
             return result;
         },
         noselect() {
@@ -158,6 +163,14 @@ export default {
     padding-left: 30px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+}
+.searchPanel {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.searchPanel input {
+    width: 400px;
 }
 .bookGrid {
     margin: 0px;
