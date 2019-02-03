@@ -165,11 +165,13 @@ const actions = {
         try {
             const resp = await fetch('/books');
             const json = await resp.json();
-            console.log(resp);
-            console.log(json);
-            if (json.result !== 'ng') {
+            const resp2 = await fetch('/books_share');
+            const json2 = await resp2.json();
+            console.log(resp, resp2);
+            console.log(json, json2);
+            if (json.result !== 'ng' && json2.result !== 'ng') {
                 commit('setBooks', 
-                    json.result.map(e => Object.assign({}, e, {
+                    [...json.result, ...json2.result].map(e => Object.assign({}, e, {
                         thumb: null, pdf: null
                     }))
                 );
@@ -206,6 +208,14 @@ const actions = {
         fd.append('category', JSON.stringify(category));
         const opt = {method: 'POST', body: fd};
         const resp = await fetch('/update_book_ctgr', opt);
+        console.log(resp);
+    },
+    async updateBookShare({}, {tgtId, share}) {
+        const fd = new FormData();
+        fd.append('tgtId', tgtId);
+        fd.append('share', JSON.stringify(share));
+        const opt = {method: 'POST', body: fd};
+        const resp = await fetch('/update_book_share', opt);
         console.log(resp);
     },
     async deleteBook({}, tgtId) {

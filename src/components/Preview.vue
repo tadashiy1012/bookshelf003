@@ -1,8 +1,14 @@
 <template>
     <div>
         <div class="previewMenu">
-            <div>title:<span>{{book.value.name}}</span></div>
             <div>
+                title:<span>{{book.value.name}}</span>
+                <span> </span>
+                user:<span>{{book.value.user}}</span>
+            </div>
+            <div>
+                <button v-show="showShare" v-on:click="onShareClick(book)">share</button>
+                <span> </span>
                 <button v-on:click="onDownloadClick(book)">download</button>
                 <span> </span>
                 <button v-on:click="onCloseClick">close</button>
@@ -36,6 +42,15 @@ export default {
         numPages: function() {
             if (this.doc === null) return 0;
             else return this.doc.numPages;
+        },
+        showShare() {
+            const id = this.$route.params.bookId;
+            const book = this.$store.getters.books.find(e => e._id === id);
+            if (book === void 0) return false;
+            const user = this.$store.getters.login;
+            const result = book.value.user === user;
+            console.log(result);
+            return result;
         }
     },
     methods: {
@@ -58,6 +73,16 @@ export default {
             a.href = URL.createObjectURL(tgt.pdf);
             a.dataset.downloadurl = ['application/pdf', a.download, a.href].join(':');
             a.click();
+        },
+        onShareClick(tgt) {
+            const share = prompt('Enter user names separated by commas', tgt.value.share.join(','));
+            console.log(share);
+            if (share === null) return; 
+            const ary = share.split(',');
+            console.log(ary);
+            this.$store.dispatch('updateBookShare', {tgtId: tgt._id, share: ary}).then(() => {
+                this.$store.dispatch('fetchBooks');
+            });
         }
     },
     mounted() {

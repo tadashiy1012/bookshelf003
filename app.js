@@ -22,7 +22,8 @@ const upload = multer({storage});
 const db = {};
 db.datas = new Nedb({filename: 'datasfile'});
 db.datas.loadDatabase();
-const bookModel = {type: 'book', value: {name: null, file: null, thumb: null, category: [], user: null}};
+const bookModel = {type: 'book', value: {
+    name: null, file: null, thumb: null, category: [], user: null, share: []}};
 const ctgrModel = {type: 'category', value: {name: null, user: null}};
 const userModel = {type: 'user', value: {name: null, salt: null, hash: null}};
 const findDb = (query) => {
@@ -166,6 +167,28 @@ app.post('/update_book_ctgr', upload.none(), async (req, res) => {
     }
 });
 
+app.post('/update_book_share', upload.none(), async (req, res) => {
+    console.log(req.body);
+    if (req.session.name === void 0 || req.session.name === null) {
+        res.status(400).send('ng');
+    } else {
+        const query = {_id: req.body.tgtId};
+        try {
+            const resp = await findDb(query);
+            const doc = resp[0];
+            const update = {$set: {value: {
+                ...doc.value, share: JSON.parse(req.body.share)
+            }}};
+            db.datas.update(query, update, {}, (err) => {
+                if (err) res.status(500).send(err);
+                else res.send('ok');
+            });
+        } catch (err) {
+            res.status(500).send(err);
+        }
+    }
+});
+
 app.post('/delete_book', upload.none(), (req, res) => {
     if (req.session.name === void 0 || req.session.name === null) {
         res.status(400).send('ng');
@@ -200,7 +223,22 @@ app.get('/books', upload.none(), (req, res) => {
             else res.send({result: docs});
         });
     }
-    
+});
+
+app.get('/books_share', upload.none(), async (req, res) => {
+    if (req.session.name === void 0 || req.session.name === null) {
+        res.status(400).send({result: 'ng'});
+    } else {
+        try {
+            const query = {type: 'book', 'value.share': {$in: [req.session.name]}};
+            const resp = await findDb(query);
+            console.log(resp);
+            res.send({result: resp});
+        } catch (err) {
+            console.log(err);
+            res.status(500).send(err);
+        }
+    }
 });
 
 app.get('/categories', upload.none(), (req, res) => {
