@@ -78,11 +78,11 @@ export default {
             a.click();
         },
         onShareClick(tgt) {
-            const share = encodeURIComponent(prompt(
-                'Enter user names separated by commas', tgt.value.share.join(',')));
+            const share = prompt(
+                'Enter user names separated by commas', tgt.value.share.join(','));
             console.log(share);
             if (share === null) return; 
-            const ary = share.split(',');
+            const ary = share.split(',').map(e => encodeURIComponent(e));
             console.log(ary);
             this.$store.dispatch('updateBookShare', {tgtId: tgt._id, share: ary}).then(() => {
                 this.$store.dispatch('fetchBooks');
@@ -90,11 +90,11 @@ export default {
         },
         onTagClick(tgt) {
             console.log(tgt);
-            const text = encodeURIComponent(prompt(
-                'Enter tag separated by commas', tgt.value.tag.join(',')));
+            const text = prompt(
+                'Enter tag separated by commas', tgt.value.tag.join(','));
             console.log(text);
             if (text === null) return;
-            const ary = text.split(',');
+            const ary = text.split(',').map(e => encodeURIComponent(e));
             console.log(ary);
             this.$store.dispatch('updateBookTag', {tgtId: tgt._id, tag: ary}).then(() => {
                 this.$store.dispatch('fetchBooks');
