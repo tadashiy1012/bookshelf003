@@ -5,6 +5,8 @@
                 current:<span>{{current}}</span>
             </div>
             <div>
+                <button v-on:click="toggleTagShow">toggle tag panel</button>
+                <span> </span>
                 <button v-on:click="toggleAddShow">toggle add panel</button>
                 <span> </span>
                 <button v-on:click="toggleRmShow">toggle remove button</button>
@@ -19,6 +21,19 @@
                     <li :key="idx">
                         <button v-on:click="onAddClick(bk)">add</button>
                         <span class="captionContainer">{{bk.value.name}}</span>
+                    </li>
+                </template>
+            </ul>
+        </div>
+        <div class="tagPanel" v-show="tagShow">
+            <div>tag panel</div>
+            <ul>
+                <template v-for="(tag, idx) in tags">
+                    <li :key="idx">
+                        <a href="#" v-on:click="(ev) => {
+                            ev.preventDefault();
+                            onTagLabelClick(tag);    
+                        }">{{tag}}</a>
                     </li>
                 </template>
             </ul>
@@ -52,6 +67,7 @@ export default {
             addShow: false,
             rmShow: false,
             delShow: false,
+            tagShow: true,
             search: ''
         };
     },
@@ -69,9 +85,13 @@ export default {
             const ctgr = this.$route.params.category || '';
             const books = this.$store.getters.books;
             const result = books.filter(e => [...e.value.category, '']
-                .find(e2 => e2 === ctgr) !== void 0)
-                .filter(e => e.value.name.indexOf(this.search) !== -1);
-            return result;
+                .find(e2 => e2 === ctgr) !== void 0);
+            if (this.search.charAt(0) !== ':') {
+                return result.filter(e => e.value.name.indexOf(this.search) !== -1);
+            } else {
+                const tgt = this.search.substr(1, this.search.length);
+                return result.filter(e => e.value.tag.find(ee => ee === tgt) !== void 0);
+            }
         },
         noselect() {
             const ctgr = this.$route.params.category || '';
@@ -79,12 +99,18 @@ export default {
             const result = books.filter(e => [...e.value.category, '']
                 .find(e2 => e2 === ctgr) === void 0);
             return result;
+        },
+        tags() {
+            return [...new Set(this.$store.getters.books.map(e => e.value.tag).flat())];
         }
     },
     methods: {
         getSrc(tgt) {
             if (tgt === void 0 || tgt.thumb === null) return;
             return URL.createObjectURL(tgt.thumb);
+        },
+        toggleTagShow() {
+            this.tagShow = !this.tagShow;
         },
         toggleAddShow() {
             this.addShow = !this.addShow;
@@ -122,6 +148,9 @@ export default {
                     this.$store.dispatch('fetchBooks');
                 });
             }
+        },
+        onTagLabelClick(tgt) {
+            this.search = ':' + tgt;
         }
     },
     mounted() {
@@ -153,7 +182,7 @@ export default {
 .catalogMenu :nth-child(2) {
     text-align: right;
 }
-.addPanel, .rmPanel {
+.addPanel, .rmPanel, .tagPanel {
     border: dashed 1px #666;
     margin-bottom: 6px;
     padding: 8px;
@@ -163,6 +192,15 @@ export default {
     padding-left: 30px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+}
+.tagPanel ul {
+    display: flex;
+    flex-direction: row;
+    margin: 0px;
+    padding: 0px;
+}
+.tagPanel li {
+    margin-left: 34px;
 }
 .searchPanel {
     display: flex;

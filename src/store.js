@@ -218,6 +218,14 @@ const actions = {
         const resp = await fetch('/update_book_share', opt);
         console.log(resp);
     },
+    async updateBookTag({}, {tgtId, tag}) {
+        const fd = new FormData();
+        fd.append('tgtId', tgtId);
+        fd.append('tag', JSON.stringify(tag));
+        const opt = {method: 'POST', body: fd};
+        const resp = await fetch('/update_book_tag', opt);
+        console.log(resp);
+    },
     async deleteBook({}, tgtId) {
         const fd = new FormData();
         fd.append('tgtId', tgtId);

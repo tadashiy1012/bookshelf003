@@ -7,6 +7,8 @@
                 user:<span>{{book.value.user}}</span>
             </div>
             <div>
+                <button v-show="showShare" v-on:click="onTagClick(book)">tag</button>
+                <span> </span>
                 <button v-show="showShare" v-on:click="onShareClick(book)">share</button>
                 <span> </span>
                 <button v-on:click="onDownloadClick(book)">download</button>
@@ -81,6 +83,17 @@ export default {
             const ary = share.split(',');
             console.log(ary);
             this.$store.dispatch('updateBookShare', {tgtId: tgt._id, share: ary}).then(() => {
+                this.$store.dispatch('fetchBooks');
+            });
+        },
+        onTagClick(tgt) {
+            console.log(tgt);
+            const text = prompt('Enter tag separated by commas', tgt.value.tag.join(','));
+            console.log(text);
+            if (text === null) return;
+            const ary = text.split(',');
+            console.log(ary);
+            this.$store.dispatch('updateBookTag', {tgtId: tgt._id, tag: ary}).then(() => {
                 this.$store.dispatch('fetchBooks');
             });
         }
