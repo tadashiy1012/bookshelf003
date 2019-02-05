@@ -7,19 +7,19 @@
                 user:<span>{{book.value.user}}</span>
             </div>
             <div>
-                <button v-show="showShare" v-on:click="onTagClick(book)">tag</button>
+                <button v-show="showShare" @click="onTagClick(book)">tag</button>
                 <span> </span>
-                <button v-show="showShare" v-on:click="onShareClick(book)">share</button>
+                <button v-show="showShare" @click="onShareClick(book)">share</button>
                 <span> </span>
-                <button v-on:click="onDownloadClick(book)">download</button>
+                <button @click="onDownloadClick(book)">download</button>
                 <span> </span>
-                <button v-on:click="onCloseClick">close</button>
+                <button @click="onCloseClick">close</button>
             </div>
         </div>
         <div class="pageMenu">
-            <button v-on:click="onPrevClick">prev</button>
+            <button @click="onPrevClick">prev</button>
             <span>[{{page}}/{{numPages}}]</span>
-            <button v-on:click="onNextClick">next</button>
+            <button @click="onNextClick">next</button>
         </div>
         <div class="canvasContainer">
             <canvas></canvas>
@@ -27,7 +27,7 @@
     </div>
 </template>
 <script>
-import {getDoc} from '../util';
+import {getDoc, escapeHTML} from '../util';
 export default {
     data() {
         return {
@@ -56,6 +56,7 @@ export default {
         }
     },
     methods: {
+        escapeHTML,
         onPrevClick() {
             if (this.page > 1) {
                 this.page = this.page - 1;
@@ -77,7 +78,8 @@ export default {
             a.click();
         },
         onShareClick(tgt) {
-            const share = prompt('Enter user names separated by commas', tgt.value.share.join(','));
+            const share = encodeURIComponent(prompt(
+                'Enter user names separated by commas', tgt.value.share.join(',')));
             console.log(share);
             if (share === null) return; 
             const ary = share.split(',');
@@ -88,7 +90,8 @@ export default {
         },
         onTagClick(tgt) {
             console.log(tgt);
-            const text = prompt('Enter tag separated by commas', tgt.value.tag.join(','));
+            const text = encodeURIComponent(prompt(
+                'Enter tag separated by commas', tgt.value.tag.join(',')));
             console.log(text);
             if (text === null) return;
             const ary = text.split(',');

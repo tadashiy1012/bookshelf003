@@ -6,19 +6,19 @@
             <br>
             {{name}}
             <br>
-            <button v-on:click="onLogoutClick">logout</button>
+            <button @click="onLogoutClick">logout</button>
         </p>
         <p>
             <b>book</b>
             <br>
-            <button v-on:click="onUploadClick">upload</button>
+            <button @click="onUploadClick">upload</button>
         </p>
         <p>
             <b>category</b>
             <br>
-            <button v-on:click="onCreateClick">create</button>
+            <button @click="onCreateClick">create</button>
             <br>
-            <button v-on:click="onEditClick">edit</button>
+            <button @click="onEditClick">edit</button>
             <br>
             <ul class="ctgrLs">
                 <template v-for="(ctgr, idx) in categories">
@@ -27,7 +27,7 @@
                             {{ctgr[1]}}
                         </router-link>
                         <span v-show="showDel">
-                            <button v-on:click="onDelClick(ctgr)">del</button>
+                            <button @click="onDelClick(ctgr)">del</button>
                         </span>
                     </li>
                 </template>
@@ -56,7 +56,7 @@ export default {
             await this.$store.dispatch('initLogin');
         },
         async onCreateClick() {
-            const text = prompt();
+            const text = encodeURIComponent(prompt());
             console.log(text);
             if (text === null || text.length === 0) return;
             await this.$store.dispatch('createCategory', text);

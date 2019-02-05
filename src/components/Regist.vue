@@ -10,7 +10,7 @@
             <span>password</span>
             <input type="password" name="password" id="inPass" v-model="password">
         </div>
-        <button v-on:click="onSendClick">send</button>
+        <button @click="onSendClick">send</button>
     </div>
 </template>
 <script>
@@ -23,8 +23,8 @@ export default {
     },
     methods: {
         async onSendClick() {
-            const name = this.name;
-            const password = this.password;
+            const name = encodeURIComponent(this.name);
+            const password = encodeURIComponent(this.password);
             if (name.length === 0 || password.length === 0) {
                 alert('registration fail!');
                 return;

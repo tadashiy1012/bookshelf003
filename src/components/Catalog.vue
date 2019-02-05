@@ -5,13 +5,13 @@
                 current:<span>{{current}}</span>
             </div>
             <div>
-                <button v-on:click="toggleTagShow">toggle tag panel</button>
+                <button @click="toggleTagShow">toggle tag panel</button>
                 <span> </span>
-                <button v-on:click="toggleAddShow">toggle add panel</button>
+                <button @click="toggleAddShow">toggle add panel</button>
                 <span> </span>
-                <button v-on:click="toggleRmShow">toggle remove button</button>
+                <button @click="toggleRmShow">toggle remove button</button>
                 <span> </span>
-                <button v-on:click="toggleDelShow">toggle delete button</button>
+                <button @click="toggleDelShow">toggle delete button</button>
             </div>
         </div>
         <div class="addPanel" v-show="addShow">
@@ -19,7 +19,7 @@
             <ul>
                 <template v-for="(bk, idx) in noselect">
                     <li :key="idx">
-                        <button v-on:click="onAddClick(bk)">add</button>
+                        <button @click="onAddClick(bk)">add</button>
                         <span class="captionContainer">{{bk.value.name}}</span>
                     </li>
                 </template>
@@ -30,7 +30,7 @@
             <ul>
                 <template v-for="(tag, idx) in tags">
                     <li :key="idx">
-                        <a href="#" v-on:click="(ev) => {
+                        <a href="#" @click="(ev) => {
                             ev.preventDefault();
                             onTagLabelClick(tag);    
                         }">{{tag}}</a>
@@ -49,10 +49,10 @@
                             <div class="thumbImgContainer"><img :src="getSrc(bk)" alt="book"></div>
                         </router-link>
                         <div class="buttonContainer" v-show="rmShow">
-                            <button v-on:click="onRmClick(bk)">remove</button>
+                            <button @click="onRmClick(bk)">remove</button>
                         </div>
                         <div class="buttonContainer" v-show="delShow">
-                            <button v-on:click="onDelClick(bk)">delete</button>
+                            <button @click="onDelClick(bk)">delete</button>
                         </div>
                     </li>
                 </template>

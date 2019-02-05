@@ -11,7 +11,7 @@
                 <span>password</span>
                 <input type="password" name="password" id="inPass" v-model="password">
             </div>
-            <button v-on:click="onSendClick">login</button>
+            <button @click="onSendClick">login</button>
         </div>
         <div v-show="logged">
             <p>logged</p>
@@ -37,8 +37,8 @@ export default {
     },
     methods: {
         async onSendClick() {
-            const name = this.name;
-            const password = this.password;
+            const name = encodeURIComponent(this.name);
+            const password = encodeURIComponent(this.password);
             if (name.length === 0 || password.length === 0) {
                 alert('login fail!');
                 return;
