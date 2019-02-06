@@ -49,7 +49,7 @@
                             <div class="thumbImgContainer"><img :src="getSrc(bk)" alt="book"></div>
                         </router-link>
                         <div class="buttonContainer" v-show="rmShow">
-                            <button @click="onRmClick(bk)" :disabled="user !== bk.value.user">remove</button>
+                            <button @click="onRmClick(bk)">remove</button>
                         </div>
                         <div class="buttonContainer" v-show="delShow">
                             <button @click="onDelClick(bk)" :disabled="user !== bk.value.user">delete</button>
@@ -103,7 +103,11 @@ export default {
             return result;
         },
         tags() {
-            return [...new Set(this.$store.getters.books.map(e => e.value.tag).flat())];
+            const ctgr = this.$route.params.category || '';
+            const books = this.$store.getters.books;
+            const result = books.filter(e => [...e.value.category, '']
+                .find(e2 => e2 === ctgr) !== void 0);
+            return [...new Set(result.map(e => e.value.tag).flat())];
         },
         user() {
             return this.$store.getters.login;
