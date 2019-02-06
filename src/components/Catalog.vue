@@ -49,10 +49,10 @@
                             <div class="thumbImgContainer"><img :src="getSrc(bk)" alt="book"></div>
                         </router-link>
                         <div class="buttonContainer" v-show="rmShow">
-                            <button @click="onRmClick(bk)">remove</button>
+                            <button @click="onRmClick(bk)" :disabled="user !== bk.value.user">remove</button>
                         </div>
                         <div class="buttonContainer" v-show="delShow">
-                            <button @click="onDelClick(bk)">delete</button>
+                            <button @click="onDelClick(bk)" :disabled="user !== bk.value.user">delete</button>
                         </div>
                     </li>
                 </template>
@@ -104,6 +104,9 @@ export default {
         },
         tags() {
             return [...new Set(this.$store.getters.books.map(e => e.value.tag).flat())];
+        },
+        user() {
+            return this.$store.getters.login;
         }
     },
     components: {
@@ -223,6 +226,7 @@ export default {
     grid-template-columns: repeat(5, 1fr);
     justify-content: space-between;
     align-content: space-between;
+    row-gap: 14px;
     margin: 8px 0px;
 }
 .bookGrid .thumbImgContainer {
