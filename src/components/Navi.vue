@@ -56,10 +56,10 @@ export default {
             await this.$store.dispatch('initLogin');
         },
         async onCreateClick() {
-            const text = encodeURIComponent(prompt());
+            const text = prompt();
             console.log(text);
             if (text === null || text.length === 0) return;
-            await this.$store.dispatch('createCategory', text);
+            await this.$store.dispatch('createCategory', encodeURIComponent(text));
             await this.$store.dispatch('fetchCategories');
         },
         onUploadClick() {
