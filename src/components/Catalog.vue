@@ -176,7 +176,7 @@ export default {
 <style scoped>
 .catalogMenu {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 300px 1fr;
     margin: 8px 0px;
 }
 .catalogMenu :nth-child(2) {
@@ -206,6 +206,7 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    margin: 12px auto;
 }
 .searchPanel input {
     width: 400px;
