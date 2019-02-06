@@ -23,7 +23,11 @@ export default {
             },
             { test: /\.vue$/, use: ['vue-loader'] },
             { test: /\.css$/, use: ['style-loader', 'css-loader'] },
-            { test: /\.jpg$/, use: ['file-loader'] }
+            { test: /\.jpg$/, use: ['file-loader'] },
+            {
+                test: /\.(eot|svg|ttf|woff|woff2)(\??\#?v=[.0-9]+)?$/,
+                loader: 'file-loader?name=/fonts/[name].[ext]',
+            }
         ]
     },
     resolve: {
