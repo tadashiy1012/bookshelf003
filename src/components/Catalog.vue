@@ -58,9 +58,11 @@
                 </template>
             </ul>
         </div>
+        <confirm ref="deleteConfirm" content="Do you really want to delete this?" />
     </div>
 </template>
 <script>
+import Confirm from './Confirm.vue';
 export default {
     data() {
         return {
@@ -104,6 +106,9 @@ export default {
             return [...new Set(this.$store.getters.books.map(e => e.value.tag).flat())];
         }
     },
+    components: {
+        Confirm
+    },
     methods: {
         getSrc(tgt) {
             if (tgt === void 0 || tgt.thumb === null) return;
@@ -142,12 +147,11 @@ export default {
             });
         },
         onDelClick(tgt) {
-            const result = confirm('Do you really want to delete this?');
-            if (result) {
+            this.$refs.deleteConfirm.show(() => {
                 this.$store.dispatch('deleteBook', tgt._id).then(() => {
                     this.$store.dispatch('fetchBooks');
                 });
-            }
+            });
         },
         onTagLabelClick(tgt) {
             this.search = ':' + tgt;
