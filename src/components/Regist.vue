@@ -11,9 +11,12 @@
             <input type="password" name="password" id="inPass" v-model="password">
         </div>
         <button @click="onSendClick">send</button>
+        <Alert ref="failAlert" content="registration fail!" />
+        <Alert ref="successAlert" content="registration success!" />
     </div>
 </template>
 <script>
+import Alert from './Alert.vue';
 export default {
     data() {
         return {
@@ -21,12 +24,23 @@ export default {
             password: ''
         };
     },
+    computed: {
+        fail() {
+            return this.$refs.failAlert;
+        },
+        success() {
+            return this.$refs.successAlert;
+        }
+    },
+    components: {
+        Alert
+    },
     methods: {
         async onSendClick() {
             const name = encodeURIComponent(this.name);
             const password = encodeURIComponent(this.password);
             if (name.length === 0 || password.length === 0) {
-                alert('registration fail!');
+                this.fail.show();
                 return;
             }
             await this.$store.dispatch('initRegist');
@@ -34,10 +48,9 @@ export default {
             const result = this.$store.getters.regist;
             console.log(result);
             if (result) {
-                alert('registration success!');
-                this.$router.push('/');
+                this.success.show();
             } else {
-                alert('registration fail!');
+                this.fail.show();
             }
         }
     }

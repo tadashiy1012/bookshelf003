@@ -17,9 +17,11 @@
             <p>logged</p>
             <p><router-link to="/">home</router-link></p>
         </div>
+        <Alert ref="failAlert" content="login fail!" />
     </div>
 </template>
 <script>
+import Alert from './Alert.vue';
 export default {
     data() {
         return {
@@ -33,24 +35,29 @@ export default {
         },
         logged() {
             return this.$store.getters.login !== null;
+        },
+        fail() {
+            return this.$refs.failAlert;
         }
+    },
+    components: {
+        Alert
     },
     methods: {
         async onSendClick() {
             const name = encodeURIComponent(this.name);
             const password = encodeURIComponent(this.password);
             if (name.length === 0 || password.length === 0) {
-                alert('login fail!');
+                this.fail.show();
                 return;
             }
             await this.$store.dispatch('execLogin', {name, password});
             const result = this.$store.getters.login;
             console.log(result);
             if (result !== null) {
-                alert('login success!');
                 this.$router.push('/');
             } else {
-                alert('login fail!');
+                this.fail.show();
             }
         }
     },
