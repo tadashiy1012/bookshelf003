@@ -33,9 +33,12 @@
                 </template>
             </ul>
         </p>
+        <prompt ref="ctgrPrompt" 
+            content="Enter category name to create" />
     </div>
 </template>
 <script>
+import Prompt from './Prompt.vue';
 export default {
     data() {
         return {
@@ -50,17 +53,22 @@ export default {
             return this.$store.getters.categories;
         }
     },
+    components: {
+        Prompt
+    },
     methods: {
         async onLogoutClick() {
             await this.$store.dispatch('execLogout');
             await this.$store.dispatch('initLogin');
         },
-        async onCreateClick() {
-            const text = prompt();
-            console.log(text);
-            if (text === null || text.length === 0) return;
-            await this.$store.dispatch('createCategory', encodeURIComponent(text));
-            await this.$store.dispatch('fetchCategories');
+        onCreateClick() {
+            this.$refs.ctgrPrompt.show((result) => {
+                console.log(result);
+                if (!result || result.length === 0) return;
+                this.$store.dispatch('createCategory', encodeURIComponent(result)).then(() => {
+                    this.$store.dispatch('fetchCategories');
+                });
+            });
         },
         onUploadClick() {
             const infile = document.createElement('input');
@@ -81,7 +89,7 @@ export default {
             this.$store.dispatch('deleteCategory', tgt[0]).then(() => {
                 this.$store.dispatch('fetchCategories');
             });
-        }
+        },
     },
     mounted() {
         this.$store.dispatch('fetchCategories');

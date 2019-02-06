@@ -24,15 +24,22 @@
         <div class="canvasContainer">
             <canvas></canvas>
         </div>
+        <prompt ref="sharePrompt" 
+            :val="initShareVal"
+            content="Enter user names separated by commas" />
+        <prompt ref="tagPrompt"
+            :val="initTagVal"
+            content="Enter tag separated by commas" />
     </div>
 </template>
 <script>
-import {getDoc, escapeHTML} from '../util';
+import Prompt from './Prompt.vue';
+import {getDoc} from '../util';
 export default {
     data() {
         return {
             doc: null,
-            page: 1
+            page: 1,
         };
     },
     computed: {
@@ -51,12 +58,25 @@ export default {
             if (book === void 0) return false;
             const user = this.$store.getters.login;
             const result = book.value.user === user;
-            console.log(result);
             return result;
+        },
+        initShareVal() {
+            const id = this.$route.params.bookId;
+            const book = this.$store.getters.books.find(e => e._id === id);
+            if (book === void 0) return '';
+            else return book.value.share.join(',');
+        },
+        initTagVal() {
+            const id = this.$route.params.bookId;
+            const book = this.$store.getters.books.find(e => e._id === id);
+            if (book === void 0) return '';
+            else return book.value.tag.join(',');
         }
     },
+    components: {
+        Prompt
+    },
     methods: {
-        escapeHTML,
         onPrevClick() {
             if (this.page > 1) {
                 this.page = this.page - 1;
@@ -78,26 +98,23 @@ export default {
             a.click();
         },
         onShareClick(tgt) {
-            const share = prompt(
-                'Enter user names separated by commas', tgt.value.share.join(','));
-            console.log(share);
-            if (share === null) return; 
-            const ary = share.split(',').map(e => encodeURIComponent(e));
-            console.log(ary);
-            this.$store.dispatch('updateBookShare', {tgtId: tgt._id, share: ary}).then(() => {
-                this.$store.dispatch('fetchBooks');
+            this.$refs.sharePrompt.show((result) => {
+                console.log(result);
+                const ary = result.split(',').map(e => encodeURIComponent(e));
+                console.log(ary);
+                this.$store.dispatch('updateBookShare', {tgtId: tgt._id, share: ary}).then(() => {
+                    this.$store.dispatch('fetchBooks');
+                });
             });
         },
         onTagClick(tgt) {
-            console.log(tgt);
-            const text = prompt(
-                'Enter tag separated by commas', tgt.value.tag.join(','));
-            console.log(text);
-            if (text === null) return;
-            const ary = text.split(',').map(e => encodeURIComponent(e));
-            console.log(ary);
-            this.$store.dispatch('updateBookTag', {tgtId: tgt._id, tag: ary}).then(() => {
-                this.$store.dispatch('fetchBooks');
+            this.$refs.tagPrompt.show((result) => {
+                console.log(result);
+                const ary = result.split(',').map(e => encodeURIComponent(e));
+                console.log(ary);
+                this.$store.dispatch('updateBookTag', {tgtId: tgt._id, tag: ary}).then(() => {
+                    this.$store.dispatch('fetchBooks');
+                });
             });
         }
     },
