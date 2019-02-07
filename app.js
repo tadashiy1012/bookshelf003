@@ -254,7 +254,6 @@ app.get('/books_share', upload.none(), async (req, res) => {
         try {
             const query = {type: 'book', 'value.share': {$in: [req.session.name]}};
             const resp = await findDb(query);
-            console.log(resp);
             res.send({result: resp});
         } catch (err) {
             console.log(err);
