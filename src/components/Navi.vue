@@ -6,17 +6,17 @@
             <br>
             {{name}}
             <br>
-            <button @click="onLogoutClick">logout</button>
+            <icon-button icon="exit_to_app" label="logout" :on-click="onLogoutClick" />
         </p>
         <p>
             <b>book</b>
             <br>
-            <button @click="onUploadClick">upload</button>
+            <icon-button icon="publish" label="upload" :on-click="onUploadClick" />
         </p>
         <p>
             <b>category</b>
             <br>
-            <button @click="onCreateClick">create</button>
+            <icon-button icon="create" label="create" :on-click="onCreateClick" />
             <br>
             <button @click="onEditClick">edit</button>
             <br>
@@ -39,6 +39,7 @@
 </template>
 <script>
 import Prompt from './Prompt.vue';
+import IconButton from './IconButton.vue';
 export default {
     data() {
         return {
@@ -54,7 +55,7 @@ export default {
         }
     },
     components: {
-        Prompt
+        Prompt, IconButton
     },
     methods: {
         async onLogoutClick() {

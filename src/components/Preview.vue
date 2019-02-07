@@ -7,13 +7,12 @@
                 user:<span>{{book.value.user}}</span>
             </div>
             <div>
-                <button v-show="showShare" @click="onTagClick(book)">tag</button>
-                <span> </span>
-                <button v-show="showShare" @click="onShareClick(book)">share</button>
-                <span> </span>
-                <button @click="onDownloadClick(book)">download</button>
-                <span> </span>
-                <button @click="onCloseClick">close</button>
+                <icon-button icon="local_offer" label="tag"
+                    :on-click="() => onTagClick(book)" :disabled="!showShare" />
+                <icon-button icon="folder_shared" label="share" 
+                    :on-click="() => onShareClick(book)" :disabled="!showShare" />
+                <icon-button icon="get_app" label="download" :on-click="() => onDownloadClick(book)" />
+                <icon-button icon="close" label="close" :on-click="onCloseClick" />
             </div>
         </div>
         <div class="pageMenu">
@@ -34,6 +33,7 @@
 </template>
 <script>
 import Prompt from './Prompt.vue';
+import IconButton from './IconButton.vue';
 import {getDoc} from '../util';
 export default {
     data() {
@@ -74,7 +74,7 @@ export default {
         }
     },
     components: {
-        Prompt
+        Prompt, IconButton
     },
     methods: {
         onPrevClick() {
@@ -156,5 +156,10 @@ export default {
 }
 canvas {
     border: solid 1px #666;
+}
+.withIconButton div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 </style>

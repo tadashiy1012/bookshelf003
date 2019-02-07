@@ -5,17 +5,17 @@
                 current:<span>{{current}}</span>
             </div>
             <div>
-                <button @click="toggleTagShow">toggle tag panel</button>
-                <span> </span>
-                <button @click="toggleAddShow">toggle add panel</button>
-                <span> </span>
-                <button @click="toggleRmShow">toggle remove button</button>
-                <span> </span>
-                <button @click="toggleDelShow">toggle delete button</button>
+                <icon-button icon="local_offer" label="toggle tag" :on-click="toggleTagShow" />
+                <icon-button icon="add_circle" label="toggle add" :on-click="toggleAddShow" />
+                <icon-button icon="remove_circle" label="toggle remove" :on-click="toggleRmShow" />
+                <icon-button icon="delete" label="toggle delete" :on-click="toggleDelShow" />
             </div>
         </div>
         <div class="addPanel" v-show="addShow">
-            <div>add panel</div>
+            <div class="withIconLabel">
+                <i class="material-icons">add_circle</i>
+                <span>add panel</span>
+            </div>
             <ul>
                 <template v-for="(bk, idx) in noselect">
                     <li :key="idx">
@@ -26,7 +26,10 @@
             </ul>
         </div>
         <div class="tagPanel" v-show="tagShow">
-            <div>tag panel</div>
+            <div class="withIconLabel">
+                <i class="material-icons">local_offer</i>
+                <span>tag panel</span>
+            </div>
             <ul>
                 <template v-for="(tag, idx) in tags">
                     <li :key="idx">
@@ -39,7 +42,9 @@
             </ul>
         </div>
         <div class="searchPanel">
-            <div><span>search:</span><input type="text" v-model="search"></div>
+            <i class="material-icons">search</i>
+            <span>search:</span>
+            <input type="text" v-model="search">
         </div>
         <div>
             <ul class="bookGrid">
@@ -49,10 +54,16 @@
                             <div class="thumbImgContainer"><img :src="getSrc(bk)" alt="book"></div>
                         </router-link>
                         <div class="buttonContainer" v-show="rmShow">
-                            <button @click="onRmClick(bk)">remove</button>
+                            <button @click="onRmClick(bk)"><div>
+                                <i class="material-icons">remove_circle</i>
+                                <span>remove</span>
+                            </div></button>
                         </div>
                         <div class="buttonContainer" v-show="delShow">
-                            <button @click="onDelClick(bk)" :disabled="user !== bk.value.user">delete</button>
+                            <button @click="onDelClick(bk)" :disabled="user !== bk.value.user"><div>
+                                <i class="material-icons">delete</i>
+                                <span>delete</span>
+                            </div></button>
                         </div>
                     </li>
                 </template>
@@ -63,6 +74,7 @@
 </template>
 <script>
 import Confirm from './Confirm.vue';
+import IconButton from './IconButton.vue';
 export default {
     data() {
         return {
@@ -114,7 +126,7 @@ export default {
         }
     },
     components: {
-        Confirm
+        Confirm, IconButton
     },
     methods: {
         getSrc(tgt) {
@@ -217,6 +229,7 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
     margin: 12px auto;
 }
 .searchPanel input {
@@ -233,6 +246,9 @@ export default {
     row-gap: 14px;
     margin: 8px 0px;
 }
+.bookGrid li {
+    position: relative;
+}
 .bookGrid .thumbImgContainer {
     justify-self: center;
     text-align: center;
@@ -242,5 +258,18 @@ export default {
 }
 .buttonContainer {
     text-align: center;
+}
+.buttonContainer button div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.withIconLabel {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.withIconLabel span {
+    margin-left: 4px;
 }
 </style>
