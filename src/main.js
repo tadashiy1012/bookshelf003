@@ -5,6 +5,7 @@ import pdfjs from 'pdfjs-dist';
 import {Home, Regist, Login, Catalog, Preview} from './components';
 import store from './store';
 import 'material-design-icons/iconfont/material-icons.css';
+import './css/bootstrap.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = 'pdf.worker.bundle.js';
 
