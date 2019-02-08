@@ -254,6 +254,7 @@ export default {
 }
 .bookGrid img {
     border: solid 1px #666;
+    border-radius: 0.3rem;
 }
 .buttonContainer {
     text-align: center;

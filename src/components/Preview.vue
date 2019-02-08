@@ -1,9 +1,9 @@
 <template>
     <div>
         <div class="previewMenu">
-            <div>
+            <div class="labelContainer">
                 title:<span>{{book.value.name}}</span>
-                <span> </span>
+                <span style="margin-left:8px;"> </span>
                 user:<span>{{book.value.user}}</span>
             </div>
             <div>
@@ -17,7 +17,7 @@
         </div>
         <div class="pageMenu">
             <button class="btn" @click="onPrevClick">prev</button>
-            <span>[{{page}}/{{numPages}}]</span>
+            <span class="pageNum">[{{page}}/{{numPages}}]</span>
             <button class="btn" @click="onNextClick">next</button>
         </div>
         <div class="canvasContainer">
@@ -145,11 +145,18 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     margin: 8px 0px;
+}
+.labelContainer {
+    font-size: 16px;
 }
 .pageMenu {
     text-align: center;
     margin: 8px 0px;
+}
+.pageNum {
+    font-size: 16px;
 }
 .canvasContainer {
     text-align: center;
