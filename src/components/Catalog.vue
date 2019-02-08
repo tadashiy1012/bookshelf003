@@ -1,8 +1,8 @@
 <template>
     <div>
         <div class="catalogMenu">
-            <div>
-                current:<span>{{current}}</span>
+            <div class="currentCtgrLabel">
+                category:<span>{{current}}</span>
             </div>
             <div>
                 <icon-button icon="local_offer" label="toggle tag" :on-click="toggleTagShow" />
@@ -44,7 +44,7 @@
         <div class="searchPanel">
             <i class="material-icons">search</i>
             <span>search:</span>
-            <input type="text" v-model="search">
+            <input type="text" class="form-control" v-model="search">
         </div>
         <div>
             <ul class="bookGrid">
@@ -54,16 +54,11 @@
                             <div class="thumbImgContainer"><img :src="getSrc(bk)" alt="book"></div>
                         </router-link>
                         <div class="buttonContainer" v-show="rmShow">
-                            <button @click="onRmClick(bk)"><div>
-                                <i class="material-icons">remove_circle</i>
-                                <span>remove</span>
-                            </div></button>
+                            <icon-button icon="remove_circle" label="remove" :on-click="() => onRmClick(bk)" />
                         </div>
                         <div class="buttonContainer" v-show="delShow">
-                            <button @click="onDelClick(bk)" :disabled="user !== bk.value.user"><div>
-                                <i class="material-icons">delete</i>
-                                <span>delete</span>
-                            </div></button>
+                            <icon-button icon="delete" label="delete" 
+                                :on-click="() => onDelClick(bk)" :disabled="user !== bk.value.user" />
                         </div>
                     </li>
                 </template>
@@ -197,9 +192,13 @@ export default {
 }
 </script>
 <style scoped>
+.currentCtgrLabel {
+    font-size: 16px;
+}
 .catalogMenu {
     display: grid;
     grid-template-columns: 300px 1fr;
+    align-items: center;
     margin: 8px 0px;
 }
 .catalogMenu :nth-child(2) {

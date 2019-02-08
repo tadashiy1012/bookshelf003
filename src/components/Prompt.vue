@@ -2,10 +2,10 @@
     <dialog>
         <h3>input</h3>
         <p>{{content}}</p>
-        <p><input type="text" v-model="value"></p>
+        <p><input type="text" class="form-control" v-model="value"></p>
         <footer>
-            <button @click="onOkClick">ok</button>
-            <button @click="onCancelClick">cancel</button>
+            <button class="btn" @click="onOkClick">ok</button>
+            <button class="btn" @click="onCancelClick">cancel</button>
         </footer>
     </dialog>
 </template>

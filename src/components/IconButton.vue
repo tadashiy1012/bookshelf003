@@ -1,5 +1,5 @@
 <template>
-    <button class="iconButton" @click="onClick" :disabled="disabled || false">
+    <button class="iconButton btn" @click="onClick" :disabled="disabled || false">
         <div>
             <i class="material-icons">{{icon}}</i>
             <span>{{label}}</span>

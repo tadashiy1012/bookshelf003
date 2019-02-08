@@ -2,15 +2,15 @@
     <div class="registContainer">
         <h1>hondana</h1>
         <h2>registration</h2>
-        <div class="inputContainer">
+        <div class="inputContainer form-group">
             <span>name</span>
-            <input type="text" name="name" id="inName" v-model="name">
+            <input type="text" class="form-control" name="name" id="inName" v-model="name">
         </div>
-        <div class="inputContainer">
+        <div class="inputContainer form-group">
             <span>password</span>
-            <input type="password" name="password" id="inPass" v-model="password">
+            <input type="password" class="form-control" name="password" id="inPass" v-model="password">
         </div>
-        <button @click="onSendClick">send</button>
+        <button class="btn" @click="onSendClick">send</button>
         <Alert ref="failAlert" content="registration fail!" />
         <Alert ref="successAlert" content="registration success!" />
     </div>
@@ -60,6 +60,8 @@ export default {
 <style scoped>
 .registContainer {
     text-align: center;
+    width: 400px;
+    margin: 0px auto;
 }
 h1 {
     letter-spacing: 6px;
@@ -68,6 +70,7 @@ h1 {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
     margin-bottom: 6px;
     margin-right: 40px;
 }

@@ -3,8 +3,8 @@
         <h3>confirm</h3>
         <p>{{content}}</p>
         <footer>
-            <button @click="onOkClick">ok</button>
-            <button @click="onCancelClick">cancel</button>
+            <button class="btn" @click="onOkClick">ok</button>
+            <button class="btn" @click="onCancelClick">cancel</button>
         </footer>
     </dialog>
 </template>

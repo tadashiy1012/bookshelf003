@@ -18,13 +18,13 @@
             <br>
             <icon-button icon="create" label="create" :on-click="onCreateClick" />
             <br>
-            <button @click="onEditClick">edit</button>
+            <button class="btn" style="margin-top:6px;" @click="onEditClick">edit</button>
             <br>
             <ul class="ctgrLs">
                 <template v-for="(ctgr, idx) in categories">
                     <li :key="idx">
                         <router-link :to="'/catalog/' + ctgr[0]">
-                            {{ctgr[1]}}
+                            <span class="link">{{ctgr[1]}}</span>
                         </router-link>
                         <span v-show="showDel">
                             <button @click="onDelClick(ctgr)">del</button>
@@ -105,5 +105,8 @@ export default {
     margin: 6px 0px;
     padding: 0px;
     list-style-type: none;
+}
+.ctgrLs .link {
+    font-size: 16px;
 }
 </style>
