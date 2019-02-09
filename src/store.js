@@ -25,7 +25,21 @@ const mutations = {
         state.categories = payload;
     },
     setBooks(state, payload) {
-        state.books = payload;
+        const oldObj = state.books
+            .filter(e => payload.find(ee => ee._id === e._id) !== void 0)
+            .map(e => {
+                const tgt = Object.assign({}, payload.find(ee => ee._id === e._id));
+                for (const key in tgt) {
+                    if (tgt.hasOwnProperty(key)) {
+                        if (tgt[key] === null) delete tgt[key];
+                    }
+                }
+                return Object.assign({}, e, tgt);
+            }
+        );
+        const newObj = payload.filter(e => state.books.find(ee => ee._id === e._id) === void 0);
+        const obj = [...newObj, ...oldObj];
+        state.books = obj;
     },
     setThumb(state, {tgtId, thumb}) {
         const tgt = state.books.find(e => e._id === tgtId);
@@ -138,6 +152,7 @@ const actions = {
             if (json.result !== 'ng') {
                 commit('setCategories', [
                     ['', 'all'],
+                    ['fav', 'favorite'],
                     ...json.result.map(e => [e._id, e.value.name])
                 ]);
             }   
@@ -224,6 +239,14 @@ const actions = {
         fd.append('tag', JSON.stringify(tag));
         const opt = {method: 'POST', body: fd};
         const resp = await fetch('/update_book_tag', opt);
+        console.log(resp);
+    },
+    async updateBookFav({}, {tgtId, fav}) {
+        const fd = new FormData();
+        fd.append('tgtId', tgtId);
+        fd.append('fav', fav);
+        const opt = {method: 'POST', body: fd};
+        const resp = await fetch('/update_book_fav', opt);
         console.log(resp);
     },
     async deleteBook({}, tgtId) {

@@ -5,8 +5,10 @@
                 category:<span>{{current}}</span>
             </div>
             <div>
-                <icon-button icon="local_offer" label="toggle tag" :on-click="toggleTagShow" />
-                <icon-button icon="add_circle" label="toggle add" :on-click="toggleAddShow" />
+                <icon-button icon="local_offer" label="toggle tag"
+                    :on-click="toggleTagShow" :disabled="current === 'fav'" />
+                <icon-button icon="add_circle" label="toggle add" 
+                    :on-click="toggleAddShow" :disabled="current === 'fav'" />
                 <icon-button icon="remove_circle" label="toggle remove" :on-click="toggleRmShow" />
                 <icon-button icon="delete" label="toggle delete" :on-click="toggleDelShow" />
             </div>
@@ -25,7 +27,7 @@
                 </template>
             </ul>
         </div>
-        <div class="tagPanel" v-show="tagShow">
+        <div class="tagPanel" v-show="tagShow && current !== 'fav'">
             <div class="withIconLabel">
                 <i class="material-icons">local_offer</i>
                 <span>tag panel</span>
@@ -41,7 +43,7 @@
                 </template>
             </ul>
         </div>
-        <div class="searchPanel">
+        <div class="searchPanel" v-show="current !== 'fav'">
             <i class="material-icons">search</i>
             <span>search:</span>
             <input type="text" class="form-control" v-model="search">
@@ -50,11 +52,15 @@
             <ul class="bookGrid">
                 <template v-for="(bk, idx) in select">
                     <li :key="idx">
-                        <router-link :to="'/preview/' + bk._id">
-                            <div class="thumbImgContainer"><img :src="getSrc(bk)" alt="book"></div>
-                        </router-link>
+                        <div style="position:relative;" @mouseover="() => onMouseOver(bk)" @mouseleave="onMouseLeave">
+                            <router-link :to="'/preview/' + bk._id">
+                                <div class="thumbImgContainer"><img :src="getSrc(bk)" alt="book"></div>
+                            </router-link>
+                            <fav ref="fav" :tgt="bk" />
+                        </div>
                         <div class="buttonContainer" v-show="rmShow">
-                            <icon-button icon="remove_circle" label="remove" :on-click="() => onRmClick(bk)" />
+                            <icon-button icon="remove_circle" label="remove" 
+                                :on-click="() => onRmClick(bk)" :disabled="current === 'fav'" />
                         </div>
                         <div class="buttonContainer" v-show="delShow">
                             <icon-button icon="delete" label="delete" 
@@ -70,6 +76,7 @@
 <script>
 import Confirm from './Confirm.vue';
 import IconButton from './IconButton.vue';
+import Fav from './Fav.vue';
 export default {
     data() {
         return {
@@ -93,12 +100,17 @@ export default {
         select() {
             const ctgr = this.$route.params.category || '';
             const books = this.$store.getters.books;
-            const result = books.filter(e => [...e.value.category, '']
-                .find(e2 => e2 === ctgr) !== void 0);
-            if (this.search.charAt(0) !== ':') {
+            if (ctgr === 'fav') {
+                const res = books.filter(e => e.value.fav === 'true');
+                return res;
+            } else if (this.search.charAt(0) !== ':') {
+                const result = books.filter(e => [...e.value.category, '']
+                    .find(e2 => e2 === ctgr) !== void 0);
                 return result.filter(e => e.value.name.indexOf(this.search) !== -1);
             } else {
                 const tgt = this.search.substr(1, this.search.length);
+                const result = books.filter(e => [...e.value.category, '']
+                    .find(e2 => e2 === ctgr) !== void 0);
                 return result.filter(e => e.value.tag.find(ee => ee === tgt) !== void 0);
             }
         },
@@ -121,7 +133,7 @@ export default {
         }
     },
     components: {
-        Confirm, IconButton
+        Confirm, IconButton, Fav
     },
     methods: {
         getSrc(tgt) {
@@ -169,6 +181,12 @@ export default {
         },
         onTagLabelClick(tgt) {
             this.search = ':' + tgt;
+        },
+        onMouseOver(tgt) {
+            this.$refs.fav.forEach(e => e.showFav(tgt));
+        },
+        onMouseLeave() {
+            this.$refs.fav.forEach(e => e.hideFav());
         }
     },
     mounted() {
@@ -188,6 +206,11 @@ export default {
         Promise.all(tasks).then((resp) => {
             console.log(resp);
         });
+    },
+    updated() {
+        if (this.$refs.fav !== undefined) {
+            this.$refs.fav.forEach(e => e.$forceUpdate());
+        }
     }
 }
 </script>

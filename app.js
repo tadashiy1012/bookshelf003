@@ -23,7 +23,9 @@ const db = {};
 db.datas = new Nedb({filename: 'datasfile'});
 db.datas.loadDatabase();
 const bookModel = {type: 'book', value: {
-    name: null, file: null, thumb: null, category: [], user: null, share: [], tag: []}};
+    name: null, file: null, thumb: null, category: [], 
+    user: null, share: [], tag: [], fav: false
+}};
 const ctgrModel = {type: 'category', value: {name: null, user: null}};
 const userModel = {type: 'user', value: {name: null, salt: null, hash: null}};
 const findDb = (query) => {
@@ -200,6 +202,28 @@ app.post('/update_book_tag', upload.none(), async (req, res) => {
             const doc = resp[0];
             const update = {$set: {value: {
                 ...doc.value, tag: JSON.parse(req.body.tag)
+            }}};
+            db.datas.update(query, update, {}, (err) => {
+                if (err) res.status(500).send(err);
+                else res.send('ok');
+            });
+        } catch (err) {
+            res.status(500).send(err);
+        }
+    }
+});
+
+app.post('/update_book_fav', upload.none(), async (req, res) => {
+    console.log(req.body);
+    if (req.session.name === void 0 || req.session.name === null) {
+        res.status(400).send('ng');
+    } else {
+        const query = {_id: req.body.tgtId};
+        try {
+            const resp = await findDb(query);
+            const doc = resp[0];
+            const update = {$set: {value: {
+                ...doc.value, fav: req.body.fav
             }}};
             db.datas.update(query, update, {}, (err) => {
                 if (err) res.status(500).send(err);
