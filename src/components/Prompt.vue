@@ -4,8 +4,8 @@
         <p>{{content}}</p>
         <p><input type="text" class="form-control" v-model="value"></p>
         <footer>
-            <button class="btn" @click="onOkClick">ok</button>
-            <button class="btn" @click="onCancelClick">cancel</button>
+            <button class="btn btn-default" @click="onOkClick">ok</button>
+            <button class="btn btn-default" @click="onCancelClick">cancel</button>
         </footer>
     </dialog>
 </template>

@@ -3,7 +3,7 @@
         <h3>message</h3>
         <p>{{content}}</p>
         <footer>
-            <button class="btn" @click="onOkClick">ok</button>
+            <button class="btn btn-default" @click="onOkClick">ok</button>
         </footer>
     </dialog>
 </template>

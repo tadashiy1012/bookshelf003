@@ -18,7 +18,7 @@
             <br>
             <icon-button icon="create" label="create" :on-click="onCreateClick" />
             <br>
-            <button class="btn" style="margin-top:6px;" @click="onEditClick">edit</button>
+            <button class="btn btn-default" style="margin-top:6px;" @click="onEditClick">edit</button>
             <br>
             <ul class="ctgrLs">
                 <template v-for="(ctgr, idx) in categories">
@@ -26,7 +26,7 @@
                         <router-link :to="'/catalog/' + ctgr[0]">
                             <span class="link">{{ctgr[1]}}</span>
                         </router-link>
-                        <span v-show="showDel">
+                        <span v-show="showDel && ctgr[0] !== '' && ctgr[0] !== 'fav'">
                             <button @click="onDelClick(ctgr)">del</button>
                         </span>
                     </li>

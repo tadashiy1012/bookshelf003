@@ -11,7 +11,7 @@
                 <span>password</span>
                 <input type="password" class="form-control" name="password" id="inPass" v-model="password">
             </div>
-            <button class="btn" @click="onSendClick">login</button>
+            <button class="btn btn-default" @click="onSendClick">login</button>
         </div>
         <div v-show="logged">
             <p>logged</p>

@@ -10,7 +10,7 @@
             <span>password</span>
             <input type="password" class="form-control" name="password" id="inPass" v-model="password">
         </div>
-        <button class="btn" @click="onSendClick">send</button>
+        <button class="btn btn-default" @click="onSendClick">send</button>
         <Alert ref="failAlert" content="registration fail!" />
         <Alert ref="successAlert" content="registration success!" />
     </div>

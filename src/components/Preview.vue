@@ -16,9 +16,9 @@
             </div>
         </div>
         <div class="pageMenu">
-            <button class="btn" @click="onPrevClick">prev</button>
+            <button class="btn btn-default" @click="onPrevClick">prev</button>
             <span class="pageNum">[{{page}}/{{numPages}}]</span>
-            <button class="btn" @click="onNextClick">next</button>
+            <button class="btn btn-default" @click="onNextClick">next</button>
         </div>
         <div class="canvasContainer">
             <canvas></canvas>
